@@ -55,7 +55,8 @@ jobs:
       - name: Build rootfs
         run: |
           mkdir -p output
-          docker run --rm --platform ${{ matrix.platform }} \
+          docker run --rm --privileged --platform ${{ matrix.platform }} \
+            -e ARCH=${{ matrix.arch }} \
             -v "$PWD/input:/input:ro" \
             -v "$PWD/output:/output" \
             ${{ matrix.docker_image }} \
