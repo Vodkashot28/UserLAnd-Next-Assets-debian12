@@ -1,7 +1,14 @@
 #!/bin/bash
 set -e
 
-ARCH=${ARCH:-arm64}
+# Map CI arch names to Debian arch names
+case "${ARCH:-arm64}" in
+  x86_64) DEB_ARCH=amd64 ;;
+  arm)    DEB_ARCH=armhf ;;
+  arm64)  DEB_ARCH=arm64 ;;
+  x86)    DEB_ARCH=i386  ;;
+  *)      DEB_ARCH=${ARCH:-arm64} ;;
+esac
 ROOTFS_DIR=/tmp/debian12-rootfs
 
 # Install debootstrap
@@ -9,7 +16,7 @@ apt-get update -qq
 apt-get install -y --no-install-recommends debootstrap
 
 # Build minimal Debian 12 rootfs
-debootstrap --arch=${ARCH} bookworm ${ROOTFS_DIR} http://deb.debian.org/debian
+debootstrap --arch=${DEB_ARCH} bookworm ${ROOTFS_DIR} http://deb.debian.org/debian
 
 # Add AI/ML packages inside chroot
 chroot ${ROOTFS_DIR} /bin/bash -c "
