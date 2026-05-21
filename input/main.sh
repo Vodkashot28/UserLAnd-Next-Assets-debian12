@@ -16,7 +16,7 @@ apt-get update -qq
 apt-get install -y --no-install-recommends debootstrap
 
 # Build minimal Debian 12 rootfs
-debootstrap --arch=${DEB_ARCH} bookworm ${ROOTFS_DIR} http://deb.debian.org/debian
+debootstrap --arch=${DEB_ARCH} --variant=minbase bookworm ${ROOTFS_DIR} http://deb.debian.org/debian
 
 # Add AI/ML packages inside chroot
 chroot ${ROOTFS_DIR} /bin/bash -c "
